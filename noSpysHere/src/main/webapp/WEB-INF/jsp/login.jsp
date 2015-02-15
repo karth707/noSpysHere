@@ -10,6 +10,9 @@
 <body onload='document.loginForm.username.focus();'>
     <h1>No SpYs Here!</h1>
 	<div>
+		<p>spyCode: ${spyCode}</p>
+	  	<p>isASpy: ${isASpy}</p>
+	  	
 		<h3>Login with Username and Password</h3> 
 		
 		<c:if test="${not empty error}">

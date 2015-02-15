@@ -2,6 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page isELIgnored="false"%>
+<%@ page session="true"%>
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,9 @@
 </head>
 <body> 
     <div>
+    	<p>spyCode: ${spyCode}</p>
+		<p>isASpy: ${isASpy}</p>
+		
     	<p style="background-color:red;color: white; text-align: center;opacity: 0.6; width: 40%;margin-top: 10px;">${newUserError}</p>
         <form:form action="/noSpysHere/user/register" method="post" commandName="userForm" name="register">
             <table>

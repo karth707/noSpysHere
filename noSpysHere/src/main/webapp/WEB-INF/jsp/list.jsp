@@ -13,6 +13,8 @@
 		
 		<div>
 	  		<p>hello : ${username}</p>
+	  		<p>spyCode: ${spyCode}</p>
+	  		<p>isASpy: ${isASpy}</p>
 	  		<c:if test="${pageContext.request.userPrincipal.name != null}">
 	    		<a href="javascript:formSubmit()">Logout</a>
 			</c:if>

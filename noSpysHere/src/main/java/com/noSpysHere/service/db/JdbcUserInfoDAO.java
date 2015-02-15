@@ -119,4 +119,22 @@ public class JdbcUserInfoDAO implements UserInfoDAO{
 			}
 		});	
 	}
+
+	public List<Message> getAllSpyMessages() {
+		String sql = "SELECT * FROM messages_spy";
+		logger.info("Running query: " + sql);
+		return jdbcTemplate.query(sql, new ResultSetExtractor<List<Message>>(){
+			public List<Message> extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				List<Message> messages = new ArrayList<Message>();
+				while(rs.next()){
+					Message message = new Message();
+					message.setMessage(rs.getString("message"));
+					message.setTitle(rs.getString("title"));
+					messages.add(message);
+				}
+				return messages;
+			}
+		});	
+	}
 }

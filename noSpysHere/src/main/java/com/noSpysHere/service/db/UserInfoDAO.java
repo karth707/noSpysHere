@@ -13,4 +13,5 @@ public interface UserInfoDAO {
 	public boolean addMessage(Message message, String username);
 	public boolean addSpyMessage(Message message, String username);
 	public List<Message> getAllMessages();
+	public List<Message> getAllSpyMessages();
 }

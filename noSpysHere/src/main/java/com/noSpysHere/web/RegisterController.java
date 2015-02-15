@@ -1,13 +1,16 @@
 package com.noSpysHere.web;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +20,10 @@ import com.noSpysHere.domain.NewUser;
 import com.noSpysHere.domain.UserInfo;
 import com.noSpysHere.domain.UserRole;
 import com.noSpysHere.service.db.UserInfoDAO;
+import com.noSpysHere.util.Utils;
 
 @Controller
-@RequestMapping(value = {"/user/register", "/signup/register", "/register"})
+@RequestMapping(value = "/user/register")
 public class RegisterController {
 
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -28,7 +32,14 @@ public class RegisterController {
 	private UserInfoDAO userInfoDAO;
 	
 	@RequestMapping(method = RequestMethod.GET)
-    public String viewRegistration(Map<String, Object> model) {
+    public String viewRegistration(Map<String, Object> model, HttpServletRequest request) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			Utils.spyCodeStuff(request.getSession(), "0", userDetail.getUsername());
+		}
+		
         NewUser userForm = new NewUser();    
         model.put("userForm", userForm);
         return "register";
@@ -57,30 +68,10 @@ public class RegisterController {
 			model.put("newUserError", "password must match!");
 			return "register";
 		}else{
-			String knockCode = getKnockCode(newUser.getUsername());
+			String knockCode = Utils.getKnockCode(newUser.getUsername());
 			updateDB(newUser, knockCode);
 			return "login";
 		}
-	}
-
-	private String getKnockCode(String username) {
-		String knockCode = "5555";
-		try {
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			m.reset();
-			m.update(username.getBytes());
-			byte[] digest = m.digest();
-			BigInteger bigInt = new BigInteger(1,digest);
-			String hexknockCode = bigInt.toString(16).substring(0, Math.min(knockCode.length(), 4));
-			String code = "";
-			for(char r: hexknockCode.toCharArray()){
-				code = code + Integer.toString(Character.digit(r, 16)%4);
-			}
-			knockCode = code;
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return knockCode;
 	}
 
 	private void updateDB(NewUser newUser, String knockCode) {
@@ -111,7 +102,6 @@ public class RegisterController {
 	}
 	
 	public static void main(String [] args){
-		RegisterController r = new RegisterController();
-		System.out.println(r.getKnockCode("ObMaX"));
+		System.out.println(Utils.getKnockCode("ObMaX"));
 	}
 }

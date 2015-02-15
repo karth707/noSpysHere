@@ -2,6 +2,8 @@ package com.noSpysHere.web;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.noSpysHere.domain.Message;
 import com.noSpysHere.service.db.UserInfoDAO;
+import com.noSpysHere.util.Utils;
 
 @Controller
 public class MessageController {
@@ -23,7 +26,14 @@ public class MessageController {
 	private UserInfoDAO userInfoDAO;
 	
 	@RequestMapping(value="/message/add", method = RequestMethod.GET)
-	public String viewRegistration(Map<String, Object> model) {
+	public String viewRegistration(Map<String, Object> model, HttpServletRequest request) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			Utils.spyCodeStuff(request.getSession(), "2", userDetail.getUsername());
+		}
+		
 		Message messageForm = new Message();    
         model.put("messageForm", messageForm);
         return "message";
@@ -31,10 +41,9 @@ public class MessageController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public String processMessage(@ModelAttribute("messageForm") Message message,
-            Model model) {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+            Model model, HttpServletRequest request) {
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			model.addAttribute("username", userDetail.getUsername());
@@ -43,8 +52,11 @@ public class MessageController {
 				model.addAttribute("info", "Invalid charecters in text");
 				return "message";
 			}
-			
-			userInfoDAO.addMessage(message, userDetail.getUsername());
+			if((int)request.getSession().getAttribute("isASpy") == 1){
+				userInfoDAO.addSpyMessage(message, userDetail.getUsername());
+			}else{
+				userInfoDAO.addMessage(message, userDetail.getUsername());
+			}
 			model.addAttribute("info", "Message added successfully");
 			return "message";
 		}

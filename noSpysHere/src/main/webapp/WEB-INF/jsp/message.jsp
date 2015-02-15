@@ -11,6 +11,8 @@
   	<body>
 		<sec:authorize access="hasRole('ROLE_USER')">
 		<p>${info}</p>
+		<p>spyCode: ${spyCode}</p>
+		<p>isASpy: ${isASpy}</p>
 	    <form:form action="/noSpysHere/message/add" method="post" commandName="messageForm" name="create-message">
             <table>
                 <tr>

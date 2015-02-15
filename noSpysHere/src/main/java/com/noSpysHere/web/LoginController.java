@@ -1,5 +1,7 @@
 package com.noSpysHere.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.noSpysHere.util.Utils;
+
 @Controller
 public class LoginController {
 
@@ -22,8 +26,14 @@ public class LoginController {
 	public String login(
 			@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout,
-			Model model) {
+			Model model, HttpServletRequest request) {
 
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			Utils.spyCodeStuff(request.getSession(), "1", userDetail.getUsername());
+		}
+		
 		if (error != null) {
 			model.addAttribute("error", "Invalid username and password!");
 		}
