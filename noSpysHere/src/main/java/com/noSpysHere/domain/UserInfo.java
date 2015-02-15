@@ -6,6 +6,10 @@ public class UserInfo {
 	private String password;
 	private String knock;
 	
+	public UserInfo(){
+		
+	}
+	
 	public UserInfo(String username, String password, String knock){
 		this.password = password;
 		this.username = username;

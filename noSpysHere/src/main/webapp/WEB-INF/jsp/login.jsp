@@ -52,12 +52,10 @@
 #headerBack {
 	width:100%;
 	height:220px;
-	background-image:url("<c:url value="/resources/images/background_3.jpg" />");
 }
 #headerBack2 {
 	width:100%;
 	height:150px;
-	background-image:url("<c:url value="/resources/images/background_3.jpg" />");
 	opacity: 0.8;
 }
 h1, h2, h3 {	
@@ -96,7 +94,7 @@ tr.spaceUnder > td
     	<br>
     	<br>
     	<div id="header">
-    		<h1>iBase - Your Personal Image Database</h1>
+    		<h1>No SpYs Here!</h1>
     	</div>   
     </div>   	
 	<div id="backLogin">
@@ -108,12 +106,12 @@ tr.spaceUnder > td
 			<c:if test="${not empty msg}">
 				<div class="msg">${msg}</div>
 			</c:if> 
-			<form name='loginForm'
+			<form name='login'
 	  			action="<c:url value='/j_spring_security_check' />" method='POST' role="form" style="text-align: center;">
 				<table>
 					<tr class="spaceUnder">
 						<td id="field">User ID:</td>
-						<td><input type='text' name='userId' style="width:100%;border-color: gainsboro;border-width: 3;"></td>
+						<td><input type='text' name='username' style="width:100%;border-color: gainsboro;border-width: 3;"></td>
 					</tr>
 					<tr class="spaceUnder">
 						<td id="field">Password:</td>
@@ -125,7 +123,7 @@ tr.spaceUnder > td
 	  			<input type="hidden" name="${_csrf.parameterName}"value="${_csrf.token}" />
 			</form>
 			<div style="font-size: large; text-align: center;">
-				<p>New User? Signup <a href="<c:url value="/signup"/>"><font color="Green">Here!</font></a></p>
+				<p>New User? Register <a href="<c:url value="/user/register"/>"><font color="Green">Here!</font></a></p>
 			</div>
 		</div>
 	</div>
