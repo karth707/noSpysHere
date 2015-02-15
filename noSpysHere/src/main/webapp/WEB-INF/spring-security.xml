@@ -21,12 +21,12 @@
 		<access-denied-handler error-page="/403" />
  
 		<form-login 
-		    login-page="/login" 
-		    default-target-url="/home" 
-			authentication-failure-url="/login?error" 
+		    login-page="/user/login" 
+		    default-target-url="/message/list" 
+			authentication-failure-url="/user/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
-		<logout logout-success-url="/login?logout"  />
+		<logout logout-success-url="/user/logout"  />
 		<!-- enable csrf protection -->
 		<!-- <csrf/> -->
 	</http>

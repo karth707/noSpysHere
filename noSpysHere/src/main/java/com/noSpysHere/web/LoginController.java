@@ -34,6 +34,12 @@ public class LoginController {
 		return "login";
 	}
 
+	@RequestMapping(value = "/user/logout", method = RequestMethod.GET)
+	public String logout(Model model){
+		model.addAttribute("msg", "You've been logged out successfully.");
+		return "login";
+	}
+	
 	// for 403 access denied page
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
 	public ModelAndView accesssDenied() {

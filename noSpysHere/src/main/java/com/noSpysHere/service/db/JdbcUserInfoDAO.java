@@ -29,9 +29,11 @@ public class JdbcUserInfoDAO implements UserInfoDAO{
 					+ "(username, password) "
 					+ "VALUES (?, ?)";
 			logger.info("Running query: " + sql);
+			System.out.println(userInfo.getUsername() + "::" + userInfo.getPassword());
 			jdbcTemplate.update(sql, userInfo.getUsername(), userInfo.getPassword());
 			return true;
 		}catch(Exception ex){
+			ex.printStackTrace();
 			logger.error("Database insert failed...");
 		}
 		return false;
@@ -40,12 +42,13 @@ public class JdbcUserInfoDAO implements UserInfoDAO{
 	public boolean insertUserRole(UserRole userRoles){
 		try{
 			String sql = "INSERT INTO user_roles " 
-						+ "(userId, ROLE)"
+						+ "(username, ROLE)"
 						+ "VALUES (?, ?)";
 			logger.info("Running query: " + sql);
-			jdbcTemplate.update(sql, userRoles.getUserId(), userRoles.getRole());
+			jdbcTemplate.update(sql, userRoles.getUsername(), userRoles.getRole());
 			return true;
 		}catch(Exception ex){
+			ex.printStackTrace();
 			logger.error("Database insertUserRole failed...");
 		}
 		return false;

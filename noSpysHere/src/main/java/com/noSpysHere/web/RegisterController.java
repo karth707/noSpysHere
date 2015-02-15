@@ -44,9 +44,13 @@ public class RegisterController {
 		}else if(newUser.getPassword().length()<6){
 			model.put("newUserError", "password must be atleast 6 characters!");
 			return "register";
+		}else if(!newUser.getPassword().equals(newUser.getPassword_confirm())){
+			System.out.println(newUser.getPassword() + ":::" + newUser.getPassword_confirm());
+			model.put("newUserError", "password must match!");
+			return "register";
 		}else{
 			updateDB(newUser);
-			return "success";
+			return "login";
 		}
 	}
 
@@ -58,7 +62,7 @@ public class RegisterController {
 		
 		UserRole userRole = new UserRole();
 		userRole.setRole("ROLE_USER");
-		userRole.setUserId(newUser.getUsername());
+		userRole.setUsername(newUser.getUsername());
 		userInfoDAO.insertUserRole(userRole);
 		
 	}
