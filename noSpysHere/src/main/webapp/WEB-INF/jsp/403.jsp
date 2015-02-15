@@ -1,10 +1,12 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
    	<title><fmt:message key="title"/></title>
 </head>
 <body>
-	<h1><font color="red">HTTP Status 403 - Access is denied</font></h1>
+	<h1>HTTP Status 403 - Access is denied</h1>
 	<c:choose>
 		<c:when test="${empty userName}">
 		  <h2>You do not have permission to access this page!</h2>

@@ -5,7 +5,8 @@ CREATE DATABASE knockDB
 CREATE TABLE `userInfo` (
   `username` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `knock` varchar(45) NOT NULL,
+  `knock` varchar(45) NOT NULL DEFAULT '1234',
+  `enabled` tinyint(4) DEFAULT '1',
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -18,3 +19,15 @@ CREATE TABLE `user_roles` (
   KEY `fk_username_idx` (`username`),
   CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `userInfo` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `messages` (
+  `username` varchar(45) NOT NULL,
+  `title` text NOT NULL,
+  `message` text NOT NULL 
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `messages_spy` (
+  `username` varchar(45) NOT NULL,
+  `title` text NOT NULL,
+  `message` text NOT NULL 
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;

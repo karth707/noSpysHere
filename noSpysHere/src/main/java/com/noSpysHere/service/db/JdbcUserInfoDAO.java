@@ -2,6 +2,8 @@ package com.noSpysHere.service.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -11,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
+import com.noSpysHere.domain.Message;
 import com.noSpysHere.domain.UserInfo;
 import com.noSpysHere.domain.UserRole;
 
@@ -66,6 +69,54 @@ public class JdbcUserInfoDAO implements UserInfoDAO{
 					return userInfo;
 				}
 				return null;
+			}
+		});	
+	}
+
+	public boolean addMessage(Message message, String username) {
+		try{
+			String sql = "INSERT INTO messages " 
+						+ "(username, title, message) "
+						+ "VALUES (?, ?, ?)";
+			logger.info("Running query: " + sql);
+			jdbcTemplate.update(sql, username, message.getTitle(), message.getMessage());
+			return true;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			logger.error("Database insert message failed...");
+		}
+		return false;
+	}
+
+	public boolean addSpyMessage(Message message, String username) {
+		try{
+			String sql = "INSERT INTO messages_spy " 
+						+ "(username, title, message) "
+						+ "VALUES (?, ?, ?)";
+			logger.info("Running query: " + sql);
+			jdbcTemplate.update(sql, username, message.getTitle(), message.getMessage());
+			return true;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			logger.error("Database insert spy message failed...");
+		}
+		return false;
+	}
+
+	public List<Message> getAllMessages() {
+		String sql = "SELECT * FROM messages";
+		logger.info("Running query: " + sql);
+		return jdbcTemplate.query(sql, new ResultSetExtractor<List<Message>>(){
+			public List<Message> extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				List<Message> messages = new ArrayList<Message>();
+				while(rs.next()){
+					Message message = new Message();
+					message.setMessage(rs.getString("message"));
+					message.setTitle(rs.getString("title"));
+					messages.add(message);
+				}
+				return messages;
 			}
 		});	
 	}

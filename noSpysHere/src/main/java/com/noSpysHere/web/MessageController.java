@@ -1,9 +1,7 @@
 package com.noSpysHere.web;
 
-import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,23 +17,30 @@ import com.noSpysHere.domain.Message;
 import com.noSpysHere.service.db.UserInfoDAO;
 
 @Controller
-public class ListController {
+public class MessageController {
 
-	protected final Log log = LogFactory.getLog(getClass());
-	
 	@Autowired
 	private UserInfoDAO userInfoDAO;
 	
-	@RequestMapping(value="/message/list", method = RequestMethod.GET)
-    public String handleHomeRequest(Model model){
+	@RequestMapping(value="/message/add", method = RequestMethod.GET)
+	public String viewRegistration(Map<String, Object> model) {
+		Message messageForm = new Message();    
+        model.put("messageForm", messageForm);
+        return "message";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public String processMessage(@ModelAttribute("messageForm") Message message,
+            Model model) {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
+		
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			model.addAttribute("username", userDetail.getUsername());
-			List<Message> messages = userInfoDAO.getAllMessages();
-			model.addAttribute("messages", messages);
-			return "list";
+			userInfoDAO.addMessage(message, userDetail.getUsername());
+			model.addAttribute("info", "Message added successfully");
+			return "message";
 		}
 		return "403";
 	}
