@@ -63,7 +63,7 @@ public class JdbcUserInfoDAO implements UserInfoDAO{
 			public UserInfo extractData(ResultSet rs) throws SQLException,
 					DataAccessException {
 				if(rs.next()){
-					UserInfo userInfo = new UserInfo(rs.getString("userId"), rs.getString("password")
+					UserInfo userInfo = new UserInfo(rs.getString("username"), rs.getString("password")
 													, rs.getString("knock"));
 					return userInfo;
 				}
