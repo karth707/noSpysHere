@@ -1,0 +1,41 @@
+Kartheek Ganesh Nallepalli
+Assignment 2
+CSE 591
+
+
+Application is written using Spring.
+To run the application you need apache tomcat, MySQl and maven.
+
+do a ‘mvn clean package’ in the root of the source this will generate a .war file that can be deployed on tomcat.
+Note: for the DB queries and the DB config, check the dbQueries file, noSpysHere-servlet.xml and spring-security.xml and make appropriate changes
+
+Base URL: localhost:8080/noSpysHere/
+
+Explanation:
+I have used jsp pages as views for the application and MySQL for the database.
+
+The state information is stored in two session attributes:
+‘isSpy’ -> This attribute is 1 when user has provided the knock code and 0 otherwise
+‘spyCode’ -> A list of the states visited by the user (this is compared to knockCode and at any stage if there is a match the ‘isSpy’ session attribute is set to 1)
+
+There are 4 controllers as listed below along with the URL mapping to trigger the controllers:
+
+RegisterController ("/user/register")
+LoginController ("/user/login")
+ListController ("/message/list")
+MessageController ("/message/add")
+
+RegisterController:
+When there is a GET request, the form is sent. When there is a POST request, a database connection is made and the user info is filled into the userInfo table along with the knockcode. If the user is already logged in then the current state is added to the queue of the last 4 states.
+
+LoginController:
+When there is a GET request, the form is sent. When there is a POST request, the info is validated and the user logs in. If the user is already logged in then the current state is added to the queue of the last 4 states.
+
+ListController:
+This page is shown when the user logs in. If the ‘isSpy’ session attribute is set to 1, then the db queries the spy table for the list of spy messages, else it queries the regular table. The current state is added to the queue of the last 4 states.
+
+MessageController:
+When there is a GET request, the form is sent. The user enters a message and submits. If the ‘isSpy’ session attribute is set to 1, then the title and message gets added to the spy table, else it gets added to the regular table. The current state is added to the queue of the last 4 states.
+
+(“/user/logout”)
+This calls the j_spring_security_logout of spring security and the session attributes are set to null and the user logs out successfully.
