@@ -58,4 +58,13 @@ public class Utils {
 			}
 		}
 	}
+
+
+	public static void clearSpyCodeStuff(HttpSession session) {
+		if(session.getAttribute("isASpy")!=null){
+			session.setAttribute("isASpy", null);
+		}if(session.getAttribute("spyCode")!=null){
+			session.setAttribute("spyCode", null);
+		}
+	}
 }

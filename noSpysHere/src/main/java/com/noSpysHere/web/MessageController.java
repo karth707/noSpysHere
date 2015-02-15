@@ -32,11 +32,11 @@ public class MessageController {
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			Utils.spyCodeStuff(request.getSession(), "2", userDetail.getUsername());
+			Message messageForm = new Message();    
+	        model.put("messageForm", messageForm);
+	        return "message";
 		}
-		
-		Message messageForm = new Message();    
-        model.put("messageForm", messageForm);
-        return "message";
+		return "403";
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -68,7 +68,7 @@ public class MessageController {
 		if(s.equals("") || s=="" || s==null){
 			return false;
 		}
-		String pattern= "^[a-zA-Z0-9 ]*$";
+		String pattern= "^[.,a-zA-Z0-9 ]*$";
 	        if(s.matches(pattern)){
 	            return true;
 	        }

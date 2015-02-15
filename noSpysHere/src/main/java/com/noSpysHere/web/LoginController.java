@@ -45,9 +45,9 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/user/logout", method = RequestMethod.GET)
-	public String logout(Model model){
-		model.addAttribute("msg", "You've been logged out successfully.");
-		return "login";
+	public String logout(Model model, HttpServletRequest request){
+		Utils.clearSpyCodeStuff(request.getSession());
+		return "redirect:/j_spring_security_logout";
 	}
 	
 	// for 403 access denied page
