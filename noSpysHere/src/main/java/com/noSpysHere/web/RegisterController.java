@@ -1,5 +1,8 @@
 package com.noSpysHere.web;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -54,22 +57,42 @@ public class RegisterController {
 			model.put("newUserError", "password must match!");
 			return "register";
 		}else{
-			updateDB(newUser);
+			String knockCode = getKnockCode(newUser.getUsername());
+			updateDB(newUser, knockCode);
 			return "login";
 		}
 	}
 
-	private void updateDB(NewUser newUser) {
+	private String getKnockCode(String username) {
+		String knockCode = "5555";
+		try {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.reset();
+			m.update(username.getBytes());
+			byte[] digest = m.digest();
+			BigInteger bigInt = new BigInteger(1,digest);
+			String hexknockCode = bigInt.toString(16).substring(0, Math.min(knockCode.length(), 4));
+			String code = "";
+			for(char r: hexknockCode.toCharArray()){
+				code = code + Integer.toString(Character.digit(r, 16)%4);
+			}
+			knockCode = code;
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return knockCode;
+	}
+
+	private void updateDB(NewUser newUser, String knockCode) {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPassword(newUser.getPassword());
 		userInfo.setUsername(newUser.getUsername());
-		userInfoDAO.insert(userInfo);
+		userInfoDAO.insert(userInfo, knockCode);
 		
 		UserRole userRole = new UserRole();
 		userRole.setRole("ROLE_USER");
 		userRole.setUsername(newUser.getUsername());
 		userInfoDAO.insertUserRole(userRole);
-		
 	}
 
 	private boolean userExists(String username) {
@@ -85,5 +108,10 @@ public class RegisterController {
 	            return true;
 	        }
 	        return false;   
+	}
+	
+	public static void main(String [] args){
+		RegisterController r = new RegisterController();
+		System.out.println(r.getKnockCode("ObMaX"));
 	}
 }

@@ -26,14 +26,13 @@ public class JdbcUserInfoDAO implements UserInfoDAO{
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public boolean insert(UserInfo userInfo){
+	public boolean insert(UserInfo userInfo, String knockCode){
 		try{
 			String sql = "INSERT INTO userInfo "
-					+ "(username, password) "
-					+ "VALUES (?, ?)";
+					+ "(username, password, knock) "
+					+ "VALUES (?, ?, ?)";
 			logger.info("Running query: " + sql);
-			System.out.println(userInfo.getUsername() + "::" + userInfo.getPassword());
-			jdbcTemplate.update(sql, userInfo.getUsername(), userInfo.getPassword());
+			jdbcTemplate.update(sql, userInfo.getUsername(), userInfo.getPassword(), knockCode);
 			return true;
 		}catch(Exception ex){
 			ex.printStackTrace();
