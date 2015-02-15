@@ -38,10 +38,28 @@ public class MessageController {
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			model.addAttribute("username", userDetail.getUsername());
+			model.addAttribute("empty", "");
+			if(!isAlphaNumeric(message.getMessage()) || !isAlphaNumeric(message.getTitle())){
+				model.addAttribute("info", "Invalid charecters in text");
+				return "message";
+			}
+			
 			userInfoDAO.addMessage(message, userDetail.getUsername());
 			model.addAttribute("info", "Message added successfully");
 			return "message";
 		}
 		return "403";
+	}
+	
+	private boolean isAlphaNumeric(String s){
+
+		if(s.equals("") || s=="" || s==null){
+			return false;
+		}
+		String pattern= "^[a-zA-Z0-9 ]*$";
+	        if(s.matches(pattern)){
+	            return true;
+	        }
+	        return false;   
 	}
 }

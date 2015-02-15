@@ -20,14 +20,13 @@
                     <td>Ttile:</td>
                 </tr>
                 <tr>
-                    <td><form:input path="title" type="text"/></td>
+                    <td><form:input path="title" type="text" value="Enter Title"/></td>
                 </tr>
                 <tr>
                     <td>message:</td>
                 </tr>
-            </table>
-            <br/>
-            <textarea name="message" form="messageForm"></textarea>
+            </table>           
+            <textarea name="message" form="messageForm">Enter Message</textarea>
             <input type="submit" name="submit" value="submit" />
         </form:form>
 	    <br>

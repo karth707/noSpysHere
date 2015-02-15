@@ -35,14 +35,19 @@ public class RegisterController {
 	public String processRegistration(@ModelAttribute("userForm") NewUser newUser,
             Map<String, Object> model) {
 
+		if(!isAlphaNumeric(newUser.getUsername()) || !isAlphaNumeric(newUser.getPassword()) 
+					|| !isAlphaNumeric(newUser.getPassword_confirm())){
+			model.put("newUserError", "Invalid Invalid charecters in from");
+			return "register";
+		}
 		if(userExists(newUser.getUsername())){
 			model.put("newUserError", "Username Taken!");
 			return "register";
 		}else if(newUser.getUsername()==""){
 			model.put("newUserError", "invalid username!");
 			return "register";
-		}else if(newUser.getPassword().length()<6){
-			model.put("newUserError", "password must be atleast 6 characters!");
+		}else if(newUser.getPassword().length()<4){
+			model.put("newUserError", "password must be atleast 4 characters!");
 			return "register";
 		}else if(!newUser.getPassword().equals(newUser.getPassword_confirm())){
 			System.out.println(newUser.getPassword() + ":::" + newUser.getPassword_confirm());
@@ -74,4 +79,11 @@ public class RegisterController {
 		return false;
 	}
 	
+	private boolean isAlphaNumeric(String s){
+	    String pattern= "^[a-zA-Z0-9@.]*$";
+	        if(s.matches(pattern)){
+	            return true;
+	        }
+	        return false;   
+	}
 }

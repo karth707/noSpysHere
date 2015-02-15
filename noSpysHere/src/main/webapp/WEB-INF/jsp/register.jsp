@@ -12,7 +12,7 @@
 <body> 
     <div>
     	<p style="background-color:red;color: white; text-align: center;opacity: 0.6; width: 40%;margin-top: 10px;">${newUserError}</p>
-        <form:form action="/noSpysHere/user/register" method="post" commandName="userForm">
+        <form:form action="/noSpysHere/user/register" method="post" commandName="userForm" name="register">
             <table>
                 <tr>
                     <td><h2>No SpYs - Registration</h2></td>
