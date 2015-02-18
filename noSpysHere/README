@@ -1,9 +1,3 @@
-Kartheek Ganesh Nallepalli
-Assignment 2
-CSE 591
-
-
-Application is written using Spring.
 To run the application you need apache tomcat, MySQl and maven.
 
 do a ‘mvn clean package’ in the root of the source this will generate a .war file that can be deployed on tomcat.
