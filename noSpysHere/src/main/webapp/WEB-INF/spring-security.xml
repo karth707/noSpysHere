@@ -22,11 +22,13 @@
  
 		<form-login 
 		    login-page="/user/login" 
-		    default-target-url="/message/list" 
+		    default-target-url="/user/loginsuccess" 
 			authentication-failure-url="/user/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
-		<logout logout-success-url="/user/login?logout"  />
+		<logout logout-success-url="/user/login?logout"  
+		    	delete-cookies="JSESSIONID"
+		    	 invalidate-session="true"  />
 		<!-- enable csrf protection -->
 		<!-- <csrf/> -->
 	</http>

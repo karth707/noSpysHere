@@ -13,6 +13,7 @@
 		<p>${info}</p>
 		<p>spyCode: ${spyCode}</p>
 		<p>isASpy: ${isASpy}</p>
+		<p>ses: ${ses}</p>
 	    <form:form action="/noSpysHere/message/add" method="post" commandName="messageForm" name="create-message">
             <table>
                 <tr>

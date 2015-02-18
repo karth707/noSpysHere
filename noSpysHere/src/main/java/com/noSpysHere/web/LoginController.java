@@ -47,7 +47,18 @@ public class LoginController {
 	@RequestMapping(value = "/user/logout", method = RequestMethod.GET)
 	public String logout(Model model, HttpServletRequest request){
 		Utils.clearSpyCodeStuff(request.getSession());
+		request.getSession().invalidate();
 		return "redirect:/j_spring_security_logout";
+	}
+	
+	@RequestMapping(value = "/user/loginsuccess", method = RequestMethod.GET)
+	public String loginsuccess(Model model, HttpServletRequest request){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			Utils.clearSpyCodeStuff(request.getSession());
+			return "loginsuccess";
+		}
+		return "403";
 	}
 	
 	// for 403 access denied page
