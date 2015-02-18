@@ -3,7 +3,7 @@ Spy messages App
 
 <b>Application Requirement:</b>
 The main functionality of the web application will have user registration, login, logout, as well as, a message board, with users able to post messages.
-Each user will have a unique “knock sequence” (code = (first4chars(MD5(username))) % 4). Once the secret “knock sequence” of URLs is requested by a logged-in session, the application must switch into “secret” mode. 
+Each user will have a unique “knock sequence” (sequence = (first4chars(MD5(username))) % 4). Once the secret “knock sequence” of URLs is requested by a logged-in session, the application must switch into “secret” mode. 
 Everything should remain the same, except now secret messages will be shown and posted.
 
 Knock-codes:
